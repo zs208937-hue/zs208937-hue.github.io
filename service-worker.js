@@ -1,27 +1,11 @@
-const CACHE = 'energetra-predracun-v2.4';
+const CACHE = 'energetra-predracun-v2.5';
 const CORE = [
   './',
   './index.html',
   './manifest.webmanifest',
   './icon-192.png',
-  './icon-512.png',
-  './pdf-share.js'
+  './icon-512.png'
 ];
-
-function injectPdfShare(html){
-  if (html.includes('pdf-share.js')) return html;
-  const tag = '<script src="./pdf-share.js?v=2.4"></script>';
-  return html.includes('</body>') ? html.replace('</body>', tag + '</body>') : html + tag;
-}
-
-async function networkIndex(req){
-  const res = await fetch(req);
-  const html = injectPdfShare(await res.text());
-  const out = new Response(html,{status:res.status,statusText:res.statusText,headers:{'content-type':'text/html; charset=utf-8'}});
-  const cache = await caches.open(CACHE);
-  cache.put('./index.html', out.clone());
-  return out;
-}
 
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(CORE)));
@@ -40,12 +24,13 @@ self.addEventListener('fetch', event => {
   if (req.method !== 'GET') return;
 
   if (req.mode === 'navigate') {
-    event.respondWith(networkIndex(req).catch(async()=>{
-      const cached = await caches.match('./index.html');
-      if (!cached) throw new Error('offline');
-      const html = injectPdfShare(await cached.text());
-      return new Response(html,{headers:{'content-type':'text/html; charset=utf-8'}});
-    }));
+    event.respondWith(
+      fetch(req).then(res => {
+        const copy = res.clone();
+        caches.open(CACHE).then(cache => cache.put('./index.html', copy));
+        return res;
+      }).catch(() => caches.match('./index.html'))
+    );
     return;
   }
 
