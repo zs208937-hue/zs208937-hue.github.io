@@ -1,17 +1,18 @@
-const CACHE = 'energetra-predracun-v2.6';
+const CACHE = 'energetra-predracun-v2.7';
 const CORE = [
   './',
   './index.html',
   './manifest.webmanifest',
   './icon-192.png',
   './icon-512.png',
+  './share-fix.js',
   './pdf-email-v2.js'
 ];
 
 function injectStablePdf(html){
-  if(html.includes('pdf-email-v2.js')) return html;
-  const tag='<script src="./pdf-email-v2.js?v=2.6"></script>';
-  return html.includes('</body>') ? html.replace('</body>',tag+'</body>') : html+tag;
+  if(html.includes('share-fix.js') && html.includes('pdf-email-v2.js')) return html;
+  const tags='<script src="./share-fix.js?v=2.7"></script><script src="./pdf-email-v2.js?v=2.7"></script>';
+  return html.includes('</body>') ? html.replace('</body>',tags+'</body>') : html+tags;
 }
 
 async function networkIndex(req){
