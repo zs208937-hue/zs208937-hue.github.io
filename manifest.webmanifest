@@ -1,0 +1,14 @@
+{
+  "name": "ENERGETRA Predračun",
+  "short_name": "Predračun",
+  "description": "ENERGETRA aplikacija za izradu i evidenciju predračuna",
+  "lang": "sr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f6f8",
+  "theme_color": "#1f2937",
+  "icons": [
+    {"src":"./icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}
