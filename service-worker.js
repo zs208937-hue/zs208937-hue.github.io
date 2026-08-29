@@ -1,4 +1,4 @@
-const CACHE = 'energetra-predracun-v2.9';
+const CACHE = 'energetra-predracun-v3.0';
 const CORE = [
   './',
   './index.html',
@@ -11,7 +11,7 @@ const CORE = [
 
 function injectSendFlow(html){
   if(html.includes('auto-download-email.js')) return html;
-  const tags='<script src="./pdf-email-v2.js?v=2.9"></script><script src="./auto-download-email.js?v=2.9"></script>';
+  const tags='<script src="./pdf-email-v2.js?v=3.0"></script><script src="./auto-download-email.js?v=3.0"></script>';
   return html.includes('</body>') ? html.replace('</body>',tags+'</body>') : html+tags;
 }
 
